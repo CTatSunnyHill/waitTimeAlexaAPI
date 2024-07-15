@@ -9,7 +9,7 @@ app.get('/api/hospitals', async (req,res) => {
 
     try {
         const browser = await puppeteer.launch({
-            //executablePath: process.env.CHROME_BIN || '/usr/bin/chromium-browser', // Ensure the correct path
+            executablePath: process.env.CHROME_BIN || '/usr/bin/chromium-browser', // Ensure the correct path
             headless: true,
             args: ['--no-sandbox', '--disable-setuid-sandbox']
         })
