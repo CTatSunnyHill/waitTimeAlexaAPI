@@ -13,6 +13,8 @@ app.get('/api/hospitals', async (req,res) => {
             headless: true,
             args: ['--no-sandbox', '--disable-setuid-sandbox']
         })
+
+        await page.setUserAgent("Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/95.0.4638.69 Safari/537.36")
     
         const page = await browser.newPage();
     
