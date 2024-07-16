@@ -19,22 +19,23 @@ app.get('/', async (req,res) => {
         executablePath: 
         process.env.NODE_ENV === "production"
           ? process.env.PUPPETEER_EXECUTABLE_PATH
-          : puppeteer.executablePath()
+          : puppeteer.executablePath(),
+        timeout: 60000
      });
 
   try { 
     const page = await browser.newPage();
 
-    await page.goto('https://edwaittimes.ca/welcome');
+    await page.goto('https://edwaittimes.ca/welcome', { timeout: 60000 });
 
-    await page.waitForSelector('#edwt-address-search-input');
+    await page.waitForSelector('#edwt-address-search-input', { timeout: 30000 });
     await page.click('#edwt-address-search-input');
 
-    await page.type('#edwt-address-search-input', "NICU Neonatal Intensive Care Unit, 4500 Oak St, Vancouver, British Columbia V5Z 2H6, Canada", { delay : 100 });
+    await page.type('#edwt-address-search-input', "NICU Neonatal Intensive Care Unit, 4500 Oak St, Vancouver, British Columbia V5Z 2H6, Canada");
     await page.click('button.m-1.flex');
 
     // Wait for the results to load
-    await page.waitForSelector('.group.md\\:cursor-pointer', { visible: true });
+    await page.waitForSelector('.group.md\\:cursor-pointer', { visible: true, timeout: 30000 });
 
     console.log("Results are loaded");
 
@@ -59,10 +60,12 @@ app.get('/', async (req,res) => {
     console.log("Extracted data:", hospitalData);
     res.json(hospitalData);
 } catch (e){
-    console.log(e);
-    res.send("Something went wrong");
+    console.error('Error occurred:', e);
+    res.status(500).send("Something went wrong");
 } finally{
-    await browser.close();
+    if (browser) {
+        await browser.close();
+    }
 }
 });
 
