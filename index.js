@@ -22,7 +22,7 @@ app.get('/', async (req,res) => {
           : puppeteer.executablePath()
      });
 
-   
+  try { 
     const page = await browser.newPage();
 
     await page.goto('https://edwaittimes.ca/welcome');
@@ -56,13 +56,14 @@ app.get('/', async (req,res) => {
 
         return hospitals;
     });
-
     console.log("Extracted data:", hospitalData);
-
-    await browser.close();
-
     res.json(hospitalData);
-
+} catch (e){
+    console.log(e);
+    res.send("Something went wrong");
+} finally{
+    await browser.close();
+}
 });
 
 app.listen(PORT, () => {
