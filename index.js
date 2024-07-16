@@ -1,17 +1,28 @@
 const express = require('express');
 const puppeteer = require('puppeteer');
-const serverless = require('serverless-http')
+require("dotenv").config();
 
 
 const app = express();
-// const port = 3000;
+const PORT = process.env.PORT || 3000;
 
-app.get('/api/hospitals', async (req,res) => {
+app.get('/', async (req,res) => {
 
-    const browser = await puppeteer.launch({ headless: true })
+    const browser = await puppeteer.launch({ 
+        args: [
+            "--disable-setuid-sandbox",
+            "--no-sandbox",
+            "--single-process",
+            "--no-zygote",
+        ],
+        headless: true, 
+        executablePath: 
+        process.env.NODE_ENV === "production"
+          ? process.env.PUPPETEER_EXECUTABLE_PATH
+          : puppeteer.executablePath()
+     });
 
-    //await page.setUserAgent("Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/95.0.4638.69 Safari/537.36")
-
+   
     const page = await browser.newPage();
 
     await page.goto('https://edwaittimes.ca/welcome');
@@ -54,9 +65,9 @@ app.get('/api/hospitals', async (req,res) => {
 
 });
 
-// app.listen(port, () => {
-//     console.log(`Server is running on http://localhost:${port}`);
-// });
+app.listen(PORT, () => {
+    console.log(`Server is running on http://localhost:${PORT}`);
+});
 
 module.exports.handler = serverless(app);
 
