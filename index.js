@@ -14,7 +14,6 @@ app.get('/', async (req, res) => {
         args: [
             "--disable-setuid-sandbox",
             "--no-sandbox",
-            "--single-process",
             "--no-zygote",
         ],
         headless: true, 
