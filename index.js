@@ -1,7 +1,7 @@
 const express = require('express'); // Import the express module
 const puppeteer = require('puppeteer'); // Import the puppeteer module
 require("dotenv").config(); // Load environment variables from .env file
-const axios = require('axios'); // Import the axios module
+
 
 const app = express(); // Create an express application
 const PORT = process.env.PORT || 3000; // Define the port on which the server will run
