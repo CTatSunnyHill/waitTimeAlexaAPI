@@ -1,6 +1,7 @@
 const express = require('express');
 const puppeteer = require('puppeteer');
 require("dotenv").config();
+const axios = require('axios');
 
 
 const app = express();
@@ -15,7 +16,7 @@ app.get('/', async (req,res) => {
             "--single-process",
             "--no-zygote",
         ],
-        headless: true, 
+        headless: false, 
         executablePath: 
         process.env.NODE_ENV === "production"
           ? process.env.PUPPETEER_EXECUTABLE_PATH
@@ -64,7 +65,7 @@ app.get('/', async (req,res) => {
     res.status(500).send("Something went wrong");
 } finally{
     if (browser) {
-        await browser.close();
+      await browser.close();
     }
 }
 });
@@ -72,6 +73,32 @@ app.get('/', async (req,res) => {
 app.listen(PORT, () => {
     console.log(`Server is running on http://localhost:${PORT}`);
 });
+
+// async function getRemoteData() {
+//     try {
+//         const response = await axios.get('https://waittimealexaapi.onrender.com/', {
+//             timeout: 60000 // Increase timeout to 60 seconds
+//         });
+//         return response.data;
+//     } catch (error) {
+//         console.error("Error fetching remote data:", error);
+//         throw new Error('Unable to fetch remote data.');
+//     }
+// }
+
+// async function displayHospitalWaitTimes() {
+//     try {
+//         const data = await getRemoteData();
+//         data.forEach(hospital => {
+//             console.log(`${hospital.name} has a wait time of ${hospital.waitTime}`);
+//         });
+//     } catch (error) {
+//         console.error('Error:', error.message);
+//     }
+// }
+
+// displayHospitalWaitTimes();
+
 
 
 
