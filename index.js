@@ -14,9 +14,11 @@ app.get('/', async (req, res) => {
         args: [
             "--disable-setuid-sandbox",
             "--no-sandbox",
+            "--single-process",
             "--no-zygote",
         ],
-        headless: true, 
+        headless: true,
+        protocolTimeout: 240000,
         executablePath: 
         process.env.NODE_ENV === "production"
           ? process.env.PUPPETEER_EXECUTABLE_PATH // Use custom executable path in production
