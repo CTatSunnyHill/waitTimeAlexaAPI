@@ -4,7 +4,8 @@ export const handler = async (event) => {
   try {
     // Fetch data from the API
     const data = await fetchData('https://waittimealexaapi.onrender.com');
-    
+
+    // Define hospital name and their wait times in a variable
     const hospitalName = "BC Children's Hospital";
     const waitTime = parseWaitTimes(data, hospitalName);
     
@@ -28,11 +29,11 @@ const fetchData = (url) => {
   return new Promise((resolve, reject) => {
     https.get(url, (res) => {
       let data = '';
-
+      // Handle Data chunks
       res.on('data', (chunk) => {
         data += chunk;
       });
-
+       // End Event
       res.on('end', () => {
         try {
           resolve(JSON.parse(data));
@@ -40,14 +41,14 @@ const fetchData = (url) => {
           reject(error);
         }
       });
-
+      // Error Event Handling
     }).on('error', (err) => {
       reject(err);
     });
   });
 };
 
-// Function to parse wait times from the fetched data
+// Function to parse wait times from the fetched data and not limited to Sunny Hill Health Centre
 // const parseWaitTimes = (data) => {
 //   return data.map(hospital => {
 //     const name = hospital.name;
@@ -56,6 +57,7 @@ const fetchData = (url) => {
 //   }).join(' ');
 // };
 
+// Function to parse wait times for Alexa Skill limited to Sunny Hill Health Centre
 const parseWaitTimes = (data, hospitalName) => {
   const hospital = data.find(hospital => hospital.name === hospitalName);
   return hospital ? `${hospital.name} has a wait time of ${hospital.waitTime}.` : `No data found for ${hospitalName}.`;
